@@ -68,10 +68,11 @@ services:
     build:
       context: ../vertice-web-react
       target: dev
-    command: ["npm", "run", "dev", "--", "-H", "0.0.0.0", "-p", "5173"]
+    command: ["npx", "next", "dev", "-H", "0.0.0.0", "-p", "5173"]
     init: true
     environment:
       NEXT_PUBLIC_API_BASE_URL: http://localhost:3000/api
+      BFF_URL: http://bff:3000
       WATCHPACK_POLLING: "true"
     ports:
       - "5173:5173"
