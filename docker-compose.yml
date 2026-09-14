@@ -64,26 +64,7 @@ services:
       api:
         condition: service_healthy
 
-  web:
-    build:
-      context: ../vertice-web-react
-      target: dev
-    command: ["npx", "next", "dev", "-H", "0.0.0.0", "-p", "5173"]
-    init: true
-    environment:
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:3000/api
-      BFF_URL: http://bff:3000
-      WATCHPACK_POLLING: "true"
-    ports:
-      - "5173:5173"
-    volumes:
-      - ../vertice-web-react:/app
-      - web_node_modules:/app/node_modules
-    depends_on:
-      - bff
-
 volumes:
   postgres_data:
   api_gradle_cache:
   bff_node_modules:
-  web_node_modules:
