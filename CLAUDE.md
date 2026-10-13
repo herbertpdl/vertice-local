@@ -67,11 +67,14 @@ API natively against a containerized DB without the rest of this stack.
 | `DB_USERNAME` | `vertice` | postgres, api |
 | `DB_PASSWORD` | `vertice` | postgres, api |
 | `BFF_LOG_LEVEL` | `info` | bff |
-| `JWT_SECRET` | `dev-secret-change-me` | bff |
+| `CORS_ORIGIN` | `http://localhost:8081` | bff |
+| `JWT_SECRET` | `vertice-dev-jwt-secret-do-not-use-in-production` | bff, api |
 | `JWT_EXPIRES_IN` | `8h` | bff |
 
-`bff`'s `CORS_ORIGIN` is hardcoded in `docker-compose.yml` (not env-driven) since it's fixed to
-`vertice-web-react`'s port from the table above.
+`JWT_SECRET` must be identical for `bff` (signs tokens) and `api` (verifies them); the default is
+the shared dev value both repos use, and both refuse it outside local dev. `CORS_ORIGIN` (a
+comma-separated list) only matters for browser clients calling the BFF directly — Expo web from
+`vertice-mobile` on `:8081`. `vertice-web-react` proxies to the BFF server-side and needs no CORS.
 
 ## Gotchas
 
