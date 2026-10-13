@@ -53,8 +53,15 @@ Source in both app repos is bind-mounted for hot reload:
 | web (native, not compose) | http://localhost:5173 | run separately: `cd ../vertice-web-react && npm run dev` |
 | bff | http://localhost:3000 | proxies to api over gRPC |
 | api (HTTP) | http://localhost:8080 | health: `/actuator/health` |
-| api (gRPC) | localhost:9090 | used by bff, not exposed externally |
+| api (gRPC) | localhost:9090 | used by bff; published for local tools (grpcurl) |
 | postgres | localhost:5432 | |
+
+Every published port is bound to `127.0.0.1`, so nothing is reachable from the LAN. This
+matters because the api runs the `local` profile (no gRPC auth, reflection on) and Postgres uses
+default credentials. To reach the BFF from a phone (Expo Go), prefer a tunnel and point
+`EXPO_PUBLIC_BFF_URL` at it; if you must expose it on the LAN, use an untracked
+`docker-compose.override.yml` with `ports: !override ["0.0.0.0:3000:3000"]` on `bff` only, and
+never expose `api` or `postgres`.
 
 `vertice-api` also ships its own standalone `docker-compose.yml` (Postgres only), for running the
 API natively against a containerized DB without the rest of this stack.
