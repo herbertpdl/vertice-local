@@ -48,8 +48,8 @@ npm run dev
 
 Each app's own env defaults already point at these ports, so no extra wiring is needed —
 `vertice-web-react`'s dev server is pinned to `5173` (not Next's usual `3000`) since `3000` is
-`vertice-bff`'s default, and `vertice-bff`'s `CORS_ORIGIN`/`vertice-api`'s gRPC target already
-default to match. See each repo's own README for details and troubleshooting.
+`vertice-bff`'s default, and `vertice-api`'s gRPC target and the shared dev `JWT_SECRET` already
+default to match (`vertice-web-react` calls the BFF server-side, so it needs no `CORS_ORIGIN`). See each repo's own README for details and troubleshooting.
 
 Given this, **this repo is a candidate for deprecation** — everything it does can now be done by
 running each app on its own, without needing a fourth checkout to hold the orchestration.

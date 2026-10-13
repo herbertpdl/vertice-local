@@ -25,6 +25,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME:-vertice}
       DB_USERNAME: ${DB_USERNAME:-vertice}
       DB_PASSWORD: ${DB_PASSWORD:-vertice}
+      JWT_SECRET: ${JWT_SECRET:-vertice-dev-jwt-secret-do-not-use-in-production}
     ports:
       - "8080:8080"
       - "9090:9090"
@@ -50,10 +51,10 @@ services:
       PORT: 3000
       HOST: 0.0.0.0
       LOG_LEVEL: ${BFF_LOG_LEVEL:-info}
-      CORS_ORIGIN: http://localhost:5173
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8081}
       VERTICE_API_GRPC_HOST: api
       VERTICE_API_GRPC_PORT: 9090
-      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-me}
+      JWT_SECRET: ${JWT_SECRET:-vertice-dev-jwt-secret-do-not-use-in-production}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
     ports:
       - "3000:3000"
