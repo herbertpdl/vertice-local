@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME:-vertice}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-vertice}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -27,8 +27,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-vertice}
       JWT_SECRET: ${JWT_SECRET:-vertice-dev-jwt-secret-do-not-use-in-production}
     ports:
-      - "8080:8080"
-      - "9090:9090"
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:9090:9090"
     volumes:
       - ../vertice-api:/app
       - api_gradle_cache:/root/.gradle
@@ -57,7 +57,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-vertice-dev-jwt-secret-do-not-use-in-production}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       - ../vertice-bff:/app
       - bff_node_modules:/app/node_modules
