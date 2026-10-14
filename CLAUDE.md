@@ -25,8 +25,9 @@ and volume/cache configuration.
 ## Commands
 
 ```sh
-cp .env.example .env       # first time only
-docker compose up --build  # start everything
+cp .env.example .env                                   # first time only
+echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env   # first time only; required
+docker compose up --build                              # start everything
 docker compose down        # stop (Ctrl-C then `down` also works)
 docker compose down -v     # also wipes Postgres volume + Gradle/npm caches
 ```
@@ -58,8 +59,8 @@ Source in both app repos is bind-mounted for hot reload:
 
 Every published port is bound to `127.0.0.1`, so nothing is reachable from the LAN. This
 matters because Postgres uses default credentials, and because the api can be switched to the
-`local` profile (no gRPC auth, reflection on; see `API_PROFILES` below). To reach the BFF from a phone (Expo Go), prefer a tunnel and point
-`EXPO_PUBLIC_BFF_URL` at it; if you must expose it on the LAN, use an untracked
+`local` profile (no gRPC auth, reflection on; see `API_PROFILES` below). To reach the BFF from a
+phone (Expo Go), prefer a tunnel and point `EXPO_PUBLIC_BFF_URL` at it; if you must expose it on the LAN, use an untracked
 `docker-compose.override.yml` with `ports: !override ["0.0.0.0:3000:3000"]` on `bff` only, and
 never expose `api` or `postgres`.
 
@@ -85,10 +86,9 @@ call must carry a BFF-minted token, and the api authorizes it (trust model: BFF 
 identical for `bff` (signs tokens) and `api` (verifies them), and can't be the public dev
 placeholder, which the api refuses outside `local`. Generate one once:
 `echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env`. `API_PROFILES=local` is the explicit
-opt-in for debugging with grpcurl/Postman without tokens (no gRPC auth, reflection on); the BFF's
-dev-only `VERIFY_PASSWORDS=false` login also needs it. `CORS_ORIGIN` (a
-comma-separated list) only matters for browser clients calling the BFF directly — Expo web from
-`vertice-mobile` on `:8081`. `vertice-web-react` proxies to the BFF server-side and needs no CORS.
+opt-in for debugging with grpcurl/Postman without tokens (no gRPC auth, reflection on).
+`CORS_ORIGIN` (a comma-separated list) only matters for browser clients calling the BFF directly —
+Expo web from `vertice-mobile` on `:8081`. `vertice-web-react` proxies to the BFF server-side and needs no CORS.
 
 ## Gotchas
 

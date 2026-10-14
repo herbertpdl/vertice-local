@@ -69,7 +69,9 @@ docker compose up --build
 
 The api runs with authorization on, like a deployment, so `JWT_SECRET` must be set (the public
 dev placeholder is refused). Set `API_PROFILES=local` in `.env` only to debug the api with
-grpcurl/Postman without tokens.
+grpcurl/Postman without tokens. **Existing `.env`:** replace an old `JWT_SECRET`
+(`dev-secret-change-me` or the shared placeholder) with a generated value, or the api refuses to
+start; sessions minted with the old secret need a fresh login.
 
 This starts, in order: Postgres → `vertice-api` (Spring Boot, Flyway migrations run automatically)
 → `vertice-bff`. Source in both app repos is bind-mounted, so edits hot-reload:
