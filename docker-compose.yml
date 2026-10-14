@@ -21,11 +21,12 @@ services:
       target: dev
     init: true
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      # Auth on by default. `local` (no gRPC auth, reflection on) is an explicit opt-in: API_PROFILES=local.
+      SPRING_PROFILES_ACTIVE: ${API_PROFILES:-default}
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME:-vertice}
       DB_USERNAME: ${DB_USERNAME:-vertice}
       DB_PASSWORD: ${DB_PASSWORD:-vertice}
-      JWT_SECRET: ${JWT_SECRET:-vertice-dev-jwt-secret-do-not-use-in-production}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env (see .env.example)}
     ports:
       - "127.0.0.1:8080:8080"
       - "127.0.0.1:9090:9090"
@@ -54,7 +55,7 @@ services:
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8081}
       VERTICE_API_GRPC_HOST: api
       VERTICE_API_GRPC_PORT: 9090
-      JWT_SECRET: ${JWT_SECRET:-vertice-dev-jwt-secret-do-not-use-in-production}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env (see .env.example)}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
     ports:
       - "127.0.0.1:3000:3000"

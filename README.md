@@ -62,9 +62,14 @@ most affected by Docker image-cache/rebuild pain. This compose file now only cov
 `http://localhost:5173`) alongside it.
 
 ```sh
-cp .env.example .env   # first time only
+cp .env.example .env                                   # first time only
+echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env   # first time only; required
 docker compose up --build
 ```
+
+The api runs with authorization on, like a deployment, so `JWT_SECRET` must be set (the public
+dev placeholder is refused). Set `API_PROFILES=local` in `.env` only to debug the api with
+grpcurl/Postman without tokens.
 
 This starts, in order: Postgres → `vertice-api` (Spring Boot, Flyway migrations run automatically)
 → `vertice-bff`. Source in both app repos is bind-mounted, so edits hot-reload:
