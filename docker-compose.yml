@@ -27,6 +27,8 @@ services:
       DB_USERNAME: ${DB_USERNAME:-vertice}
       DB_PASSWORD: ${DB_PASSWORD:-vertice}
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env (see .env.example)}
+      # Encrypts admins' authenticator secrets; refused at boot outside `local` when missing.
+      VERTICE_ADMIN_SECOND_FACTOR_KEY: ${VERTICE_ADMIN_SECOND_FACTOR_KEY:?set VERTICE_ADMIN_SECOND_FACTOR_KEY in .env (see .env.example)}
     ports:
       - "127.0.0.1:8080:8080"
       - "127.0.0.1:9090:9090"

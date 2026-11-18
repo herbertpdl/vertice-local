@@ -27,6 +27,7 @@ and volume/cache configuration.
 ```sh
 cp .env.example .env                                   # first time only
 echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env   # first time only; required
+echo "VERTICE_ADMIN_SECOND_FACTOR_KEY=$(openssl rand -base64 32)" >> .env   # first time only; required
 docker compose up --build                              # start everything
 docker compose down        # stop (Ctrl-C then `down` also works)
 docker compose down -v     # also wipes Postgres volume + Gradle/npm caches
@@ -77,6 +78,7 @@ API natively against a containerized DB without the rest of this stack.
 | `BFF_LOG_LEVEL` | `info` | bff |
 | `CORS_ORIGIN` | `http://localhost:8081` | bff |
 | `JWT_SECRET` | none — required | bff, api |
+| `VERTICE_ADMIN_SECOND_FACTOR_KEY` | none — required | api |
 | `API_PROFILES` | `default` (auth on) | api |
 | `JWT_EXPIRES_IN` | `8h` | bff |
 
@@ -85,7 +87,10 @@ call must carry a BFF-minted token, and the api authorizes it (trust model: BFF 
 = authoritative layer; see `vertice-api/CLAUDE.md`). So `JWT_SECRET` is required, must be
 identical for `bff` (signs tokens) and `api` (verifies them), and can't be the public dev
 placeholder, which the api refuses outside `local`. Generate one once:
-`echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env`. `API_PROFILES=local` is the explicit
+`echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env`. For the same reason the api needs
+`VERTICE_ADMIN_SECOND_FACTOR_KEY` (base64 of 32 bytes, the key for admins' authenticator secrets;
+the public dev key in vertice-api's `application-local.properties` is refused outside `local`):
+`echo "VERTICE_ADMIN_SECOND_FACTOR_KEY=$(openssl rand -base64 32)" >> .env`. `API_PROFILES=local` is the explicit
 opt-in for debugging with grpcurl/Postman without tokens (no gRPC auth, reflection on).
 `CORS_ORIGIN` (a comma-separated list) only matters for browser clients calling the BFF directly —
 Expo web from `vertice-mobile` on `:8081`. `vertice-web-react` proxies to the BFF server-side and needs no CORS.
