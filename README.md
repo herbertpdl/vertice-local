@@ -64,6 +64,7 @@ most affected by Docker image-cache/rebuild pain. This compose file now only cov
 ```sh
 cp .env.example .env                                   # first time only
 echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env   # first time only; required
+echo "VERTICE_ADMIN_SECOND_FACTOR_KEY=$(openssl rand -base64 32)" >> .env   # first time only; required
 docker compose up --build
 ```
 
@@ -71,7 +72,9 @@ The api runs with authorization on, like a deployment, so `JWT_SECRET` must be s
 dev placeholder is refused). Set `API_PROFILES=local` in `.env` only to debug the api with
 grpcurl/Postman without tokens. **Existing `.env`:** replace an old `JWT_SECRET`
 (`dev-secret-change-me` or the shared placeholder) with a generated value, or the api refuses to
-start; sessions minted with the old secret need a fresh login.
+start; sessions minted with the old secret need a fresh login. Add a generated
+`VERTICE_ADMIN_SECOND_FACTOR_KEY` too (the second `echo` above); the api refuses to start without
+one, and refuses the public dev key from its `application-local.properties`.
 
 This starts, in order: Postgres → `vertice-api` (Spring Boot, Flyway migrations run automatically)
 → `vertice-bff`. Source in both app repos is bind-mounted, so edits hot-reload:
